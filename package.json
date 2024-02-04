@@ -12,16 +12,20 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "inline-json-formatter.formatSelectedJSON",
-      "title": "Format JSON"
-    },{
-      "command": "inline-json-formatter.stringifyJavaScriptObject",
-      "title": "Stringify JSON Object"
-    },{
-      "command": "inline-json-formatter.formatWithCustomSpace",
-      "title": "Format JSON with custom space"
-    }]
+    "commands": [
+      {
+        "command": "inline-json-formatter.formatSelectedJSON",
+        "title": "INLINE-JSON-FORMATTER: Format JSON"
+      },
+      {
+        "command": "inline-json-formatter.stringifyJavaScriptObject",
+        "title": "INLINE-JSON-FORMATTER: Stringify JSON Object"
+      },
+      {
+        "command": "inline-json-formatter.formatWithCustomSpace",
+        "title": "INLINE-JSON-FORMATTER: Format JSON with Custom Indentation"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",

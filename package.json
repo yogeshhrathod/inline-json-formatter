@@ -7,14 +7,20 @@
     "vscode": "^1.86.0"
   },
   "categories": [
-    "Other"
+    "Formatters"
   ],
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "inline-json-formatter.helloWorld",
-      "title": "Hello World"
+      "command": "inline-json-formatter.formatSelectedJSON",
+      "title": "Format JSON"
+    },{
+      "command": "inline-json-formatter.stringifyJavaScriptObject",
+      "title": "Stringify JSON Object"
+    },{
+      "command": "inline-json-formatter.formatWithCustomSpace",
+      "title": "Format JSON with custom space"
     }]
   },
   "scripts": {

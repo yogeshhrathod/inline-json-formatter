@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-const vscode = require('vscode');
+const vscode = require("vscode");
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -9,28 +9,126 @@ const vscode = require('vscode');
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+  let formatSelectedJSONDisposable = vscode.commands.registerCommand(
+    "inline-json-formatter.formatSelectedJSON",
+    () => {
+      formatSelectedJSON();
+    }
+  );
+  let stringifyJavaScriptObjectDisposable = vscode.commands.registerCommand(
+    "inline-json-formatter.stringifyJavaScriptObject",
+    () => {
+      stringifyJavaScriptObject();
+    }
+  );
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "inline-json-formatter" is now active!');
+  let formatWithCustomSpaceDisposable = vscode.commands.registerCommand(
+    "inline-json-formatter.formatWithCustomSpace",
+    () => {
+      formatWithCustomSpace();
+    }
+  );
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('inline-json-formatter.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from INLINE JSON FORMATTER!');
-	});
-
-	context.subscriptions.push(disposable);
+  context.subscriptions.push(
+    formatSelectedJSONDisposable,
+    stringifyJavaScriptObjectDisposable,
+    formatWithCustomSpaceDisposable
+  );
 }
 
-// This method is called when your extension is deactivated
-function deactivate() {}
+function formatSelectedJSON() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (editor) {
+    const selection = editor.selection;
+    const selectedText = editor.document.getText(selection);
+    const formattingSpace = vscode.workspace
+      .getConfiguration()
+      .get("json.formattingSpace", 2);
+
+    try {
+      const formattedJSON = JSON.stringify(
+        JSON.parse(selectedText),
+        null,
+        formattingSpace
+      );
+      editor.edit((editBuilder) => {
+        editBuilder.replace(selection, formattedJSON);
+      });
+    } catch (error) {
+      vscode.window.showErrorMessage("Invalid JSON: " + error.message);
+    }
+  } else {
+    vscode.window.showInformationMessage("No active text editor.");
+  }
+}
+
+function stringifyJavaScriptObject() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (editor) {
+    const selection = editor.selection;
+    const selectedText = editor.document.getText(selection);
+    const formattingSpace = vscode.workspace
+      .getConfiguration()
+      .get("json.formattingSpace", 2);
+    try {
+      const jsObject = eval(`(${selectedText})`);
+      const stringifiedObject = JSON.stringify(jsObject, null, formattingSpace);
+      editor.edit((editBuilder) => {
+        editBuilder.replace(selection, stringifiedObject);
+      });
+    } catch (error) {
+      vscode.window.showErrorMessage(
+        "Invalid JavaScript Object: " + error.message
+      );
+    }
+  } else {
+    vscode.window.showInformationMessage("No active text editor.");
+  }
+}
+
+async function formatWithCustomSpace() {
+  const options = ["0", "2", "4"];
+  const selectedOption = await vscode.window.showQuickPick(options, {
+    placeHolder: "Select the formatting space (indentation level)",
+  });
+
+  if (selectedOption !== undefined) {
+    const formattingSpace = parseInt(selectedOption, 10);
+
+    if (!isNaN(formattingSpace)) {
+      const editor = vscode.window.activeTextEditor;
+
+      if (editor) {
+        const selection = editor.selection;
+        const selectedText = editor.document.getText(selection);
+
+        try {
+          const formattedText = JSON.stringify(
+            JSON.parse(selectedText),
+            null,
+            formattingSpace
+          );
+          editor.edit((editBuilder) => {
+            editBuilder.replace(selection, formattedText);
+          });
+        } catch (error) {
+          vscode.window.showErrorMessage(
+            "Invalid JSON or JavaScript Object: " + error.message
+          );
+        }
+      } else {
+        vscode.window.showInformationMessage("No active text editor.");
+      }
+    } else {
+      vscode.window.showErrorMessage(
+        "Invalid formatting space. Please select a valid option."
+      );
+    }
+  }
+}
 
 module.exports = {
-	activate,
-	deactivate
-}
+  activate,
+};

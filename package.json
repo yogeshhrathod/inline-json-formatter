@@ -3,6 +3,10 @@
   "displayName": "INLINE JSON FORMATTER",
   "description": "format json in anywhere any file",
   "publisher":"yogeshhrathod",
+  "contributors": ["yogeshhrathod"],
+  "icon": "images/icon.png",
+  "author": {"name": "YOGESH"},
+  "repository": {"url": "https://github.com/yogeshhrathod/inline-json-formatter"},
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.86.0"

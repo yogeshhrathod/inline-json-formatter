@@ -1,5 +1,7 @@
 # Inline JSON Formatter
 
+![Inline JSON Formatter](images/icon.png)
+
 The **Inline JSON Formatter** is a Visual Studio Code extension that allows you to format and manipulate JSON directly within your editor. It provides commands for formatting selected JSON, stringifying JavaScript objects, and customizing the formatting space.
 
 ## Features
